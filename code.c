@@ -145,6 +145,16 @@ void reflexiveClosure(int *a, int *c)
     }
 }
 
+int equal(int *a, int *b)
+{
+    for (int i = 0; i < dim * dim; i++)
+    {
+        if (*(a + i) != *(b + i))
+            return 0;
+    }
+    return 1;
+}
+
 int main()
 {
 
@@ -180,8 +190,6 @@ int main()
     int closure[dim][dim];
 
     reflexiveClosure(MATRIX[0], closure[0]);
-
-    saveMatrixInFile(closure[0]);
 
     return 0;
 }
