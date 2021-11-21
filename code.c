@@ -129,6 +129,14 @@ int equal(int *a, int *b)
     return 1;
 }
 
+void copy(int *a,int *b) {
+    // Copies matrix [a] into [b]
+     for (int i = 0; i < dim * dim; i++)
+    {
+        *(b + i)=*(a + i);
+    }
+}
+
 const char *checkReflexive(int *a)
 {
     for (int i = 0; i < dim; i++)
@@ -193,6 +201,12 @@ void symmetricClosure(int *a, int *b)
         }
     }
 }
+
+void transitiveClosure(int *a,int*b) {
+    // Warshalls algorithm
+
+}
+
 
 int main()
 {
