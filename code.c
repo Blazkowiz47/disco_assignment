@@ -28,44 +28,39 @@ void saveMatrixInFile(int *a)
         for (int i = 0; i < index; i++)
         {
             if (tok[i] != '\n')
-            {
+
                 temp[i] = tok[i];
-            }
+
             else
-            {
+
                 index--;
-            }
         }
         for (int col = 0; col < dim; col++)
         {
 
             if (*(a + dim * row + col) == 0)
-            {
+
                 temp[index] = '0';
-            }
+
             else
-            {
+
                 temp[index] = '1';
-            }
 
             index++;
             if (col != dim - 1)
-            {
+
                 temp[index] = ',';
-            }
+
             else
-            {
+
                 temp[index] = '\n';
-            }
+
             index++;
         }
 
         for (int col = 0; col < index; col++)
         {
-            if (col == index - 1 && row == dim - 1)
-            {
-            }
-            else
+            if (!(col == index - 1 && row == dim - 1))
                 fprintf(fptr, "%c", temp[col]);
         }
         // TODO: print in the file
@@ -99,9 +94,9 @@ void printMatrix(int *arr)
     for (int i = 0; i < dim; i++)
     {
         for (int j = 0; j < dim; j++)
-        {
+
             printf("%d ", *(arr + i * dim + j));
-        }
+
         printf("\n");
     }
 }
@@ -113,68 +108,87 @@ int getLength(char *line)
     for (tok = strtok(line, ",");
          tok && *tok;
          tok = strtok(NULL, ","))
-    {
+
         num++;
-    }
+
     return num;
 }
 
 int equal(int *a, int *b)
 {
     for (int i = 0; i < dim * dim; i++)
-    {
+
         if (*(a + i) != *(b + i))
             return 0;
-    }
+
     return 1;
 }
 
-void copy(int *a,int *b) {
+void copy(int *a, int *b)
+{
     // Copies matrix [a] into [b]
-     for (int i = 0; i < dim * dim; i++)
-    {
-        *(b + i)=*(a + i);
-    }
+    for (int i = 0; i < dim * dim; i++)
+
+        *(b + i) = *(a + i);
 }
 
 const char *checkReflexive(int *a)
 {
     for (int i = 0; i < dim; i++)
-    {
+
         if (*(a + i * dim + i) == 0)
             return "NO";
-    }
+
     return "YES";
+}
+
+const char *checkReflexiveElement(int *a)
+{
+    for (int i = 0; i < dim; i++)
+
+        if (*(a + i * dim + i) == 1)
+            return "YES";
+
+    return "NO";
 }
 
 void reflexiveClosure(int *a, int *c)
 {
     for (int i = 0; i < dim; i++)
-    {
+
         for (int j = 0; j < dim; j++)
         {
             *(c + i * dim + j) = *(a + i * dim + j);
             if (i == j)
-            {
+
                 *(c + i * dim + j) = 1;
-            }
         }
-    }
 }
 
 const char *checkSymmetric(int *a)
 {
     for (int i = 0; i < dim; i++)
-    {
+
         for (int j = 0; j < i; j++)
-        {
+
             if (*(a + i * dim + j) != *(a + j * dim + i))
-            {
+
                 return "NO";
-            }
-        }
-    }
+
     return "YES";
+}
+
+const char *checkSymmetricElement(int *a)
+{
+    for (int i = 0; i < dim; i++)
+
+        for (int j = 0; j < i; j++)
+
+            if (*(a + i * dim + j) == *(a + j * dim + i))
+
+                return "YES";
+
+    return "NO";
 }
 
 void symmetricClosure(int *a, int *b)
@@ -202,11 +216,42 @@ void symmetricClosure(int *a, int *b)
     }
 }
 
-void transitiveClosure(int *a,int*b) {
-    // Warshalls algorithm
+const char *checkAntiSymmetricIncludingDiagonal(int *a)
+{
+    for (int i = 0; i < dim; i++)
 
+        for (int j = 0; j <= i; j++)
+
+            if (j == i)
+
+                if (*(a + i * dim + j) == 1)
+
+                    return "NO";
+
+                else if (*(a + i * dim + j) == *(a + j * dim + i))
+
+                    return "NO";
+
+    return "YES";
 }
 
+const char *checkAntiSymmetricExcludingDiagonal(int *a)
+{
+    for (int i = 0; i < dim; i++)
+        for (int j = 0; j < i; j++)
+            if (*(a + i * dim + j) == *(a + j * dim + i))
+                return "NO";
+    return "YES";
+}
+
+void transitiveClosure(int *a)
+{
+    // Warshalls algorithm
+    for (int k = 0; k < dim; k++)
+        for (int i = 0; i < dim; i++)
+            for (int j = 0; j < dim; j++)
+                *(a + dim * i + j) = *(a + dim * i + j) | (*(a + dim * i + k) & *(a + dim * k + j));
+}
 
 int main()
 {
@@ -241,6 +286,10 @@ int main()
     }
 
     int closure[dim][dim];
+
     // Driver code
+    printMatrix(MATRIX[0]);
+    printf("%s", checkAntiSymmetricIncludingDiagonal(MATRIX[0]));
+
     return 0;
 }
