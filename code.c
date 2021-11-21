@@ -62,7 +62,6 @@ void saveMatrixInFile(int *a)
 
         for (int col = 0; col < index; col++)
         {
-            printf("%c", temp[col]);
             if (col == index - 1 && row == dim - 1)
             {
             }
@@ -155,6 +154,46 @@ void reflexiveClosure(int *a, int *c)
     }
 }
 
+const char *checkSymmetric(int *a)
+{
+    for (int i = 0; i < dim; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            if (*(a + i * dim + j) != *(a + j * dim + i))
+            {
+                return "NO";
+            }
+        }
+    }
+    return "YES";
+}
+
+void symmetricClosure(int *a, int *b)
+{
+    for (int i = 0; i < dim; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            if (*(a + i * dim + j) == 1)
+            {
+                *(b + i * dim + j) = *(a + i * dim + j);
+                *(b + j * dim + i) = *(a + i * dim + j);
+            }
+            else if (*(a + j * dim + i) == 1)
+            {
+                *(b + j * dim + i) = *(a + j * dim + i);
+                *(b + i * dim + j) = *(a + j * dim + i);
+            }
+            else
+            {
+                *(b + j * dim + i) = 0;
+                *(b + i * dim + j) = 0;
+            }
+        }
+    }
+}
+
 int main()
 {
 
@@ -188,8 +227,6 @@ int main()
     }
 
     int closure[dim][dim];
-
-    reflexiveClosure(MATRIX[0], closure[0]);
-
+    // Driver code
     return 0;
 }
